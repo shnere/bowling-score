@@ -34,7 +34,26 @@ ScoreCard.prototype.calculateResult = function(){
     if(!Array.isArray(this.rolls)){
         return false;
     }
-
+    var results = 0,
+        sum = 0,
+        bdRolls = this.translateRolls();
+    bdRolls.forEach(function(arr, idx, iterArr){
+        sum = arr.reduce(function(prev, curr) {
+            return prev + curr;
+        });
+        console.log(arr, sum);
+        if(sum < 10 || (idx === 9 && arr.length === 3)){
+            results += sum;
+        }else if(sum === 10 && arr.length === 2){
+            // Spare
+            results += 10 + iterArr[idx + 1][0];
+        }else if (sum === 10 && arr.length === 1) {
+            // Strike
+            var first   = iterArr[idx + 1][0],
+                second  = iterArr[idx + 1][1] || iterArr[idx + 2][0];
+            results += 10 + first + second;
+        }
+        console.log("results: ",results);
+    });
+    return results;
 };
-
-var score = new ScoreCard([9,1, 9,1, 9,1, 9,1, 9,1, 9,1, 9,1, 9,1, 9,1, 9,1, 9]);
