@@ -40,8 +40,7 @@ ScoreCard.prototype.calculateResult = function(){
     bdRolls.forEach(function(arr, idx, iterArr){
         sum = arr.reduce(function(prev, curr) {
             return prev + curr;
-        });
-        console.log(arr, sum);
+        }, 0);
         if(sum < 10 || (idx === 9 && arr.length === 3)){
             results += sum;
         }else if(sum === 10 && arr.length === 2){
@@ -50,10 +49,12 @@ ScoreCard.prototype.calculateResult = function(){
         }else if (sum === 10 && arr.length === 1) {
             // Strike
             var first   = iterArr[idx + 1][0],
-                second  = iterArr[idx + 1][1] || iterArr[idx + 2][0];
+                second  = iterArr[idx + 1][1];
+                if(second === undefined){
+                    second = iterArr[idx + 2][0];
+                }
             results += 10 + first + second;
         }
-        console.log("results: ",results);
     });
     return results;
 };
